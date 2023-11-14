@@ -288,6 +288,7 @@ public class ABB<T> implements Diccionario<T> {
     /**
      * {@inheritDoc}
      */
+    @SuppressWarnings("unchecked")
     @Override
     public boolean equals(Object other) {
         if (this == other) {
@@ -298,7 +299,7 @@ public class ABB<T> implements Diccionario<T> {
             return false; // Tipos diferentes, no son iguales
         }
 
-        ABB otroArbol = (ABB) other;
+        ABB<T> otroArbol = (ABB<T>) other;
 
         return sonArbolesIguales(this.raiz, otroArbol.raiz);
     }
@@ -359,7 +360,6 @@ public class ABB<T> implements Diccionario<T> {
             aListaInOrder(raiz.getDerecho(), elementos);
         }
         return elementos;
-        }
     }
 
     /*
