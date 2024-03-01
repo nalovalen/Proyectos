@@ -1,0 +1,335 @@
+public void dijkstra(Graph g, Vertex v, Vertex[] prev, int[] dist){
+    for all w in g.vertices() do{
+    // para todos los vertices del grafo
+        prev[w] = null; // el previo es null
+        dist[w] = inf; // la dist. mas corta el inf.
+    }
+    dist[v] = 0; // la dist. al origen es 0
+    s = new Set(); // s conj. vacio
+    // una cola de prioridad con los vertices, donde la clave de cada u es dist[u]
+    q = new PriorityQueue(g.vertices());
+    while (!q.isEmpty()){
+        u = q.getMin(); // se saca el mas cercano
+        s.insert(u); // se lo pone en S
+            for each edge (u,y) where y is not in s do{
+            // se recalculan la distancias de los vecinos
+                if (dist[u] + w(u,y) < dist[y]){
+                dist[y] = dist[u] + w(u,y);
+                prev[y] = u;
+                q.changeKey(y,dist[y]); // se actualiza la cola de prioridad
+            }
+            if(dist[y] < 0){
+                return true
+            }else{
+                return false
+            }
+            
+        }
+    }
+}
+
+
+// warshall: calcula el camino mas corto entre todos los nodos
+// graph es una matriz conteniendo el grafo, dist es la matriz en donde las distancias se
+// guardaran y path una matriz en donde se guardan los caminos
+public void clausulaTransitiva(int[][] graph, int[][] d, boolean[][] path){
+    int n = graph.lenght(); // cantidad de nodos
+    // se inicializa dist y path
+    for (i=1;i<n;i++){
+        for (j=1;j<n;j++){
+            d[i][j] = graph[i][j];
+            path[i][j] = false;
+            if (0 < graph[i][j] < inf)
+             path[i][j] = true;
+        }
+    }
+    // se considera cada camino pasando por un posible k
+    for(int k = 1 ; k < n; k++){
+        for (int i=1; i<n; i++){
+            for (int j=1; j<n; j++){ // si hay un nuevo minimo se cambia el valor
+                if (d[i][k] + d[k][j] < d[i][j]){
+                    d[i][j] = d[i][k] + d[k][j];
+                    path[i][j] = true;
+                }
+            }
+        }
+    }
+}
+
+public void prims(graph g, Vertex v,Vertex[] prev){
+    for (u in g) {
+        u.setKey(inf)
+    }
+    v.setKey(0);
+    path[v]=null
+
+    q = new PriorityQueue(g.vertices());
+    
+    while(!q.isEmpty()){
+        Vertex u = q.getMin();
+        for (edge(u,w) in g.edges()) {
+            if(!q.contains(w)){
+                if(w.getKey > g.weigth(u,w)){
+                    w.setKey(g.weigth)
+                }
+            }
+
+        }
+    }
+}
+
+
+
+public void caminoMasLargo(Vertex origen,Vertex destino,Vertex[] visitados,Vertex[] mejorCamino,Vertex[] actualCamino){
+    visitados.add(origen);
+    actualCamino.add(origen);
+
+    if(origen == destino){
+        if(mejorCamino.size() < actualCamino.size()){
+            mejorCamino.clear();
+            mejorCamino.addall(actualCamino);
+        }
+    }else{
+        for (w : origen.adyacentes()) {
+            if(!visitados.contains(w)){
+                caminoMasLargo(w,destino,visitados,mejorCamino,actualCamino);
+            }
+        }
+
+    }
+
+    visitados.remove(origen);
+    actualCamino.removelast();
+
+}
+
+public boolean esMinHeap? (Nodo raiz){
+    return esCompleto(raiz,0,raiz.altura()) && esHeapAux(raiz)
+}
+
+private boolean esCompleto(Nodo nodo,int nivel,int altura){
+    if(nodo == null){
+        return (nivel == altura)
+    }
+
+    if( nivel == altura-1 && nodo.izq == null && nodo.der == null){
+        return false;
+    }
+
+    return esCompleto(nodo.izq,nivel+1,altura) && esCompleto(nodo.der,nivel+1,altura)
+}
+
+private boolean esHeapAux(Nodo nodo){
+    if(nodo == null){
+        return true;
+    }else{
+        if(nodo.izq.valor() < nodo.valor() || nodo.der.valor() < nodo.valor())  {
+            return false:
+        }
+    }
+    return esHeapAux(nodo.izq) && esHeapAux(nodo.der);
+}
+
+
+ public class DisJointSet{
+     
+ 
+    private int padre[];
+    // Constructor
+    DisJointSet(int n){
+        // Defining size of the arrays.
+        parent=new int[n];
+        // Initializing their values 
+        // by is
+        for(int i=0;i<n;i++){
+            parent[i]=i;
+        }
+    }
+    
+    // Find function
+    public int find(int node){
+        
+        if(node != padre[node]){
+            return find(padre[node])
+        }
+        return node;
+    }
+    
+    // Union function 
+    public void union(int u,int v){
+
+        padre[find(v)] = find(u);
+        
+    }
+
+    public boolean ciclosNegativos (grafo g,Vertex v,int[] dist,Vertex[] path){
+        for(w in g.vertices){
+            dist[w]=inf;
+            path[w]=null;
+        }
+        dist[v]=0;
+        path[v]=v;
+
+        s= new Set();
+        q = new PriorityQueue(g.vertices());
+
+        while(!q.isEmpty()){
+
+            u = q.getMin();
+            s.add(u);
+
+            for(edge(u,y) in g.edges()){
+                if(!s.contains(y)){
+                    if(dist[u]+weigth(u,y) < dist[y]){
+                        dist[y]= dist[u]+weigth(u,y);
+                        path[y]= u;
+                        q.changeKey(y,dist[y])
+                    }
+                }
+                if(dist[y] < 0){
+                    return true
+                }
+            }
+            
+        }
+        return false;
+    }
+
+    public boolean hayciclos(Vertex v,Vertex[] visitados){
+        
+        visitados.add(v);
+
+        for(Vertex w in v.adyacentes()){
+            if(!visitados.contains(w)){
+
+                hayciclos(w,visitados)
+            
+            }else{
+                if( w.equals(v) ){
+                    return true;
+                }
+            }
+            return false;
+        }
+
+
+    }
+
+    public void warshall(grafo g,int i,int j,int k){
+        if(k == 0){
+            return g[i][j]
+        }else{
+            return minInt(warshall(i,j,k-1),warshall(i,k,k-1)+warshall(k,j,k-1))
+        }
+    }
+      
+    public void cierreTransitivo(grafo g,int[][] dist,boolean[][]cierre){
+        int n = g.lenght();
+
+        for(i=1,i<n;i++){
+            for(j=1;j<n;j++){
+                dist[i][j]= g[i][j]
+            }
+        }
+        for(k=1;k<n;k++){
+            for(i=1,i<n;i++){
+                for(j=1;j<n;j++){
+                    dist[i][j]= warshall(i,j,k)
+                    if(0< dist[i][j])
+                }
+            }
+        }
+        
+    }
+
+public void dijkstra(grafo g,Vertex v,Vertex[] prev,int[] dist){
+    for (w in g.vertices()) {
+        dist[w]=inf;
+        prev[w]=null;
+    }
+    dist[v]=0;
+    prev[v]=v;
+
+    s = new Set();
+    q = new PriorityQueue(g.vertices());
+
+    while(!q.isEmpty){
+        u = q.getMin;
+        s.add(u);
+        for(edge(u,y) in g.edges())
+            if(!s.contains(y)){
+                if(dist[u]+weigth(u,y) < dist[y]){
+                    dist[y]= dist[u]+weigth(u,y);
+                    prev[y]= u;
+                    q.changeKey(y,dist[y]);
+                }
+            }
+    }
+
+}
+
+public class DisJointSet {
+    private int[] parent
+
+
+    public void find(int nodo){
+        if(nodo == parent[nodo]){
+        return nodo
+        }else{
+            return find(parent[nodo])
+        }
+    }
+
+    public void union (int x,int y){
+        parent[find(y)]= find(x);
+    }
+}
+
+public void prims(grafo g, Vertex v,Vertex[] path){
+    for (u in g) {
+        u.setKey(inf);
+    }
+    v.setKey(0);
+    path[v]=null;
+    q = new PriorityQueue(g.vertices())
+    
+    while(!q.isEmpty()){
+        Vertex u = q.getMin();
+
+        for (edge(u,w) in g.edges()) {
+            if(!q.contains(u)){
+                if(w.getKey() > weigth(u,w)){
+                    w.setKey(weigth(u,w));
+                    path[w]=u;
+                    q.changeKey(w,weigth(u,w))
+                }
+            }
+        }
+
+    }
+}
+
+
+
+public void dfs (grafo g, Vertex v, Vertex[] visitados){
+    visitados.add(v);
+
+    for (vecino in v.adyacentes()) {
+        if(visitados.contains(vecino)){
+            if(vecino!=v){
+                return false;
+            }
+        }else{
+            if(!dfs(g,vecino,visitados)){
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+public boolean esArbol (grafo g , Vertex v,Vertex[] visitados){
+    
+    return dfs(g,v,visitados) && visitados.size() == g.vertices().size() 
+
+}

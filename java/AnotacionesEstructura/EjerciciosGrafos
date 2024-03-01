@@ -1,0 +1,29 @@
+public void dijkstra(Graph g, Vertex v, Vertex[] prev, int[] dist){
+    for all w in g.vertices() do{
+    // para todos los vertices del grafo
+        prev[w] = null; // el previo es null
+        dist[w] = MIN_VALUE; // la dist. mas corta el inf.
+    }
+    dist[v] = 0; // la dist. al origen es 0
+    s = new Set(); // s conj. vacio
+    // una cola de prioridad con los vertices, donde la clave de cada u es dist[u]
+    q = new PriorityQueue(g.vertices());
+    while (!q.isEmpty()){
+        u = q.getMin(); // se saca el mas cercano
+        s.insert(u); // se lo pone en S
+            for each edge (u,y) where y is not in s do{
+            // se recalculan la distancias de los vecinos
+                if (dist[u] + w(u,y) > dist[y]){
+                dist[y] = dist[u] + w(u,y);
+                prev[y] = u;
+                q.changeKey(y,dist[y]); // se actualiza la cola de prioridad
+            }
+            if(dist[y] < 0){
+                return HAY CICLO NEGATIVO;
+            }else{
+                return NO HAY CICLO NEGATIVO;
+            }
+            
+        }
+    }
+}
