@@ -17,13 +17,123 @@ public void dijkstra(Graph g, Vertex v, Vertex[] prev, int[] dist){
                 dist[y] = dist[u] + w(u,y);
                 prev[y] = u;
                 q.changeKey(y,dist[y]); // se actualiza la cola de prioridad
-            }
-            if(dist[y] < 0){
-                return HAY CICLO NEGATIVO;
-            }else{
-                return NO HAY CICLO NEGATIVO;
-            }
+                    if(dist[y] < 0){
+                        throw new Hayneciclogativos();
+                    }
+                }
             
+            }
+    }
+}
+
+public boolean cicloneg(graph g, vertex v, vertex[ ] mark){
+    mark.add(v):
+    for vertex u in v.adyacentes() do {
+        if(!mark.contains(u)){
+            if(cicloneg(g, u, mark)){
+                return true;
+            }
+        }else{
+            if(peso(u,v)<0){
+                return true:
+            }
         }
     }
+    return false;
+}
+
+public void warshall (int[][] g, int[][] dist, int[][] path){
+    int n= g.length();
+    for(int i=1, i<n, i++){
+        for(int j=1, j<n, j++){
+            dist[i][j] = g[i][j];
+            path[i][j] = -1;
+            if(0 < g[i][j] < integer.MAX_VALUE){
+                path[i][j] = i;
+            }
+        }
+    }
+
+    for(int k=1, k<n, k++){
+        for(int i=1, i<n, i++){
+            for(int j=1, j<n, j++){
+                if(dist[i][j] > dist[i][k]+dist[k][j]){
+                    dist[i][j] = dist[i][k]+dist[k][j];
+                    path[i][j] = k;
+                }
+            }
+        }
+    }
+
+}
+
+public boolean estaenciclo(graph g, vertex estare){
+
+    vertex[] visitados = new vertex[g.lenght];
+    vertex[] explorando = new vertex[g.length];
+
+    for all vertex v in g.vertices() do {
+        dfsdirig(v,visitados,explorando);
+        if (explorando.contains(estare)){
+            return true;
+        }
+        explorando.removeall();
+        visitados.removeall();
+    }
+
+    return false;
+}
+
+private static boolean dfsdirig(vertex v, vertex[] visitados, vertex[] explorando){
+
+    if(explorando.contains(v)){
+        return true;
+    }
+
+    if(visitados.contains(v)){
+        return false;
+    }
+
+    explorando.add(v);
+
+    for vertex u in v.adyacentes(){
+        if(dfsdirig(u, visitados, explorando)){
+            return true;
+        }
+    }
+
+    explorando.remove(v);
+    visitados.add(v);
+    return false;
+}
+
+
+public static boolean clausuraTransitiva(int[][] g, int[][] dist, boolean[][] prev){
+    int n= g.length;
+    for(int i=0, i<n, i++){
+        for(int j=0, j<n, j++){
+            dist[i][j]= g[i][j];
+            prev[i][j]= false;
+        }
+    }
+
+    for(int k=0 ,k<n, k++){
+        for(int i=0, i<n, i++){
+            for(int j=0, j<n, j++){
+                if(dist[i][j]> dist[i][k] + dist[k][j]){
+                    dist[i][j]= dist[i][k] + dist[k][j];
+                    prev[i][j]= true;
+                }
+            }
+        }
+    }
+
+    boolean cumple = true;
+    for(int i=0, i<n, i++){
+        for(int j=0, j<n,j++){
+            cumple = cumple && prev[i][j];
+        }
+    }
+
+    return cumple;
 }
