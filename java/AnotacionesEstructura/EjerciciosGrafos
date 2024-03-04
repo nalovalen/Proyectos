@@ -14,11 +14,11 @@ public void dijkstra(Graph g, Vertex v, Vertex[] prev, int[] dist){
             for each edge (u,y) where y is not in s do{
             // se recalculan la distancias de los vecinos
                 if (dist[u] + w(u,y) > dist[y]){
-                dist[y] = dist[u] + w(u,y);
-                prev[y] = u;
-                q.changeKey(y,dist[y]); // se actualiza la cola de prioridad
+                    dist[y] = dist[u] + w(u,y);
+                    prev[y] = u;
+                    q.changeKey(y,dist[y]); // se actualiza la cola de prioridad
                     if(dist[y] < 0){
-                        throw new Hayneciclogativos();
+                        throws new Hayciclonegativos();
                     }
                 }
             
@@ -26,11 +26,11 @@ public void dijkstra(Graph g, Vertex v, Vertex[] prev, int[] dist){
     }
 }
 
-public boolean cicloneg(graph g, vertex v, vertex[ ] mark){
+public boolean ciclosimple(graph g, vertex v, vertex[ ] mark){
     mark.add(v):
     for vertex u in v.adyacentes() do {
         if(!mark.contains(u)){
-            if(cicloneg(g, u, mark)){
+            if(ciclosimple(g, u, mark)){
                 return true;
             }
         }else{
@@ -136,4 +136,77 @@ public static boolean clausuraTransitiva(int[][] g, int[][] dist, boolean[][] pr
     }
 
     return cumple;
+}
+
+
+public static void prims(graph g, vertex v, vertex[] prev){
+    for u in g.vertices do{
+        u.setkey(inf);
+        prev[u]=null;
+    }
+    v.setkey(0);
+    PriorityQueue q = new PriorityQueue(g.vertices());
+    while (!q.isEmpty()){
+        vertex u = q.obtenerMin();
+        for each edge (u,y) where y is in q do{
+            if(y.getkey()> peso(u,y)){
+                y.setkey(peso(u,y));
+                prev[y]=u;
+                q.changekey(y,peso(u,y));
+            }
+        }
+    }
+}
+
+public static Set<Edges> kruskal(graph g){
+    PriorityQueue q = new PriorityQueue(g.edges);
+    Disjointset s = new Disjointset(g.vertices());
+    Set<Edges> es = new Set<Edges>();
+    for vertex v in g.vertices() do{
+        edge e = q.obtenerMin();
+        vertex u = e.origen();
+        vertex y = e.destino();
+        if(s.find(u)!=s.find(y)){
+            s.union(u,y);
+            es.add(e);
+        }
+    }
+    return es;
+}
+
+public class Disjointset<T>{
+    private <T>[] padre;
+
+    public static <T> find(<T>elem){
+        if (elem!=padre[elem]){
+            return find(padre[elem]);
+        }else{
+            return elem;
+        }
+    }
+
+    public static void union(<T> elem1, <T> elem2){
+        padre[elem1]= find(elem2);
+    }
+}
+
+public boolean esArbol(graph g, vertex raiz){
+    vertex[] visitados = new vertex[g.vertices.length()];
+    return dfsarb(raiz, visitados, null) && visitados.length() == g.vetices.length();
+}
+
+private boolean dfsarb(vertex v, vertex[] visitados, vertex padre){
+    visitados.insert(v);
+    for vertex u in v.adyacentes() do{
+        if(!visitados.contains(u)){
+            if(dfsarb(u, visitados, v)){
+                return false;
+            }
+        }else{
+            if(padre!=v){
+                return false;
+            }
+        }
+    }
+    return true;
 }
