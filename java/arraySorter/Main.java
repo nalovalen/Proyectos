@@ -24,7 +24,7 @@ public class Main {
    }
 
    @SuppressWarnings("unchecked")
-    private static <E> E[] crearArreglo(int elementos) {
+    private static E[] crearArreglo(int elementos) {
         return (E[]) new Object[elementos];
     }
 
