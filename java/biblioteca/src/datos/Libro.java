@@ -111,5 +111,6 @@ public class Libro {
 			return false;
 		return otroLibro.nroPaginas == nroPaginas;
 	}
+}
 
 
