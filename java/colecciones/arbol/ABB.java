@@ -3,7 +3,6 @@ package colecciones.arbol;
 import java.util.Comparator;
 import java.util.List;
 
-import colecciones.nodo.Nodo;
 
 import java.util.LinkedList;
 

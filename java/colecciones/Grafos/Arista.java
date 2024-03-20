@@ -1,80 +1,54 @@
 package colecciones.Grafos;
 
 public class Arista {
-  /**
-   * Obtiene el primer vertice de una arista.
-   * @return el primer vertice de una arista.
-   */
-  public Vertice getPrimero() {
-    return primero;
-  }
+	private Vertice x;
+	private Vertice y;
 
-  /**
-   * Obtiene el segundo vertice de una arista.
-   * @return el segundo vertice de una arista.
-   */
-  public Vertice getSegundo() {
-    return segundo;
-  }
+	public Arista(Vertice x, Vertice y) {
+		this.x = x;
+		this.y = y;
+	}
 
-  /**
-   * Primer vertice de una arista.
-   */
-  private final Vertice primero;
-  /**
-   * Segundo vertice de una arista
-   */
-  private final Vertice segundo;
+	public Vertice getFirst() {
+		return x;
+	}
 
-  /**
-   * Constructor de una arista.
-   * @param primero Primer vertice de la arista.
-   * @param segundo Segundo vertice de la arista.
-   */
-  public Arista(Vertice primero, Vertice segundo) {
-    this.primero = primero;
-    this.segundo = segundo;
-  }
+	public Vertice getSecond() {
+		return y;
+	}
 
-  /**
-   * El hashCode para cada Vertice esta definido a partir,
-   * de la suma de los hashCode de sus atributos primero y segundo.
-   * @return valor de hash para esta arista.
-   */
-  @Override
-  public int hashCode() {
-    int hash = primero.hashCode() + segundo.hashCode();
-    return hash;
-  }
+	@Override
+	public String toString() {
+		return "(" + x.getId().toString() + "," + y.getId().toString() + ")";
+	}
 
-  /**
-   * Compara los atributos primero y segundo entre si.
-   * @param obj a comparar con esta arista.
-   * @return true si el objeto especificado es igual a esta arista.
-   */
-  @Override
-  public boolean equals(Object obj) {
-    if (obj == null) {
+	@Override
+	public boolean equals(Object other) {
+		if (other == null) {
 			return false;
-    }
-		if (obj == this) {
+		}
+
+		if (this == other) {
 			return true;
-    }
-		if (!(obj instanceof Arista)) {
+		}
+
+		if (!(other instanceof Arista)) {
 			return false;
-    }
-		Arista otraArista = (Arista) obj;
-    boolean p = this.getPrimero().equals(otraArista.getPrimero()) && this.getSegundo().equals(otraArista.getSegundo());
-    boolean q = this.getPrimero().equals(otraArista.getSegundo()) && this.getSegundo().equals(otraArista.getPrimero());
-    return p || q;
-  }
+		}
 
-  /**
-   * @return Representacion de la arista en forma de String.
-   */
-  @Override
-  public String toString() {
-    return "[" + primero.getId() + "] <-> [" + segundo.getId() + "]";
-  }
+		Arista aux = (Arista) other;
 
+		return (this.getFirst().equals(aux.getFirst())) && (this.getSecond().equals(aux.getSecond()));
+	}
+
+	public static void main(String[] args) {
+		Arista a = new Arista(new Vertice(2), new Vertice(4));
+		Arista b = new Arista(new Vertice(2), new Vertice(4));
+
+		System.out.println(a.toString());
+		System.out.println(b.toString());
+
+		System.out.println(a.equals(b));
+		//System.out.println(a.equals(a));
+	}
 }

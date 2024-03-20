@@ -212,6 +212,8 @@ public class Avl<T> implements Diccionario<T> {
     private NodoBinario<T> getRaiz(){
         return raiz;
     }
+
+    @SuppressWarnings("unused")
     private void setRaiz(NodoBinario<T> raiz){
         this.raiz = raiz;
     }
@@ -390,6 +392,7 @@ public class Avl<T> implements Diccionario<T> {
 
     /**{@inheritDoc}*/
     @Override
+    @SuppressWarnings("unchecked")
     public boolean equals(Object other) {
         if (this == other) {
             return true;

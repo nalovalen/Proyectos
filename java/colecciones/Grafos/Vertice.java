@@ -1,148 +1,92 @@
 package colecciones.Grafos;
-
 import java.util.ArrayList;
-import java.util.List;
 
-/**
- *  Representa un nodo en un grafo.
- */
 public class Vertice {
-  /**
-   * Obtiene el identificador de vertice.
-   * @return el identificador del vertice.
-   */
-  public Integer getId() {
-    return id;
-  }
 
-  /**
-   * identificador del vertice.
-   */
-  private final Integer id;
+	private final Integer id;
+	private ArrayList<Vertice> adyacentes;
 
-  /**
-   * Obtiene la lista de vertices adyacentes a este.
-   * @return lista de vertices adyacentes a este.
-   */
-  public List<Vertice> getAdyacentes() {
-    return adyacentes;
-  }
+	public Vertice (Integer id) {
+		this.id = id;
+		adyacentes = new ArrayList<>();
+	}
 
-  /**
-   * lista de vertices adyacentes a this.
-   */
-  private List<Vertice> adyacentes;
+	public Integer getId() {
+		return id;
+	}
 
-  /**
-   * Construye un vertice con el identificador pasado como parametro.
-   * @param id identificador de vertice.
-   */
-  public Vertice(Integer id) {
-    this.id = id;
-    adyacentes = new ArrayList<>();
-  }
+	public ArrayList<Vertice> getAdyacentes() {
+		return adyacentes;
+	}
 
-  /**
-   * Conecta este vertice al vertice especificado.
-   * @param v Vertice a unir con this.
-   * @return {@code true} sii la conexión con el vértice especificado fue agregada.
-   */
-  public boolean agregarAdyacente(Vertice v) {
-    if (adyacentes == null) {
-      adyacentes = new ArrayList<Vertice>();
-    }
-    if (!adyacentes.contains(v)) {
-      adyacentes.add(v);
-      return true;
-    }
-    return false;
-  }
+	public boolean agregarAdyacente(Vertice a) {
+		return adyacentes.add(a);
+	}
 
-  /**
-   * desconecta este vertice del vertice especificado.
-   * @param v Vertice a desconectar.
-   * @return {@code true} sii la conexión con el vertice especificado fue eliminada.
-   */
-  public boolean eliminarAdyacente(Vertice v) {
-    if (adyacentes.size() != 0) {
-      return adyacentes.remove(v);
-    }
-    return false;
-  }
+	public boolean eliminarAdyacente(Vertice a) {
+		return adyacentes.remove(a);
+	}
 
-  /**
-   * El hashCode para cada Vertice esta definido a partir,
-   * de la suma de los hashCode de los id de sus adyacentes.
-   * @return valor de hash para este vertice.
-   */
-  @Override
-  public int hashCode() {
-    Integer hash = id.hashCode();
+	@Override
+	public String toString() {
+		String res = "[" + id.toString() + "] -> ";
+		for (int i = 0; i < adyacentes.size(); i++) {
+			res += adyacentes.get(i).getId() + " -> ";
+		}
+		return res + "null";
+	}
 
-    for (int i = 0; i < adyacentes.size(); i++) {
-      hash += adyacentes.get(i).getId().hashCode();
-    }
+	@Override
+	public boolean equals(Object other) {
+		if (other == null) {
+			return false;
+		}
 
-    return hash;
-  }
+		if (this == other) {
+			return true;
+		}
 
-/**
- * Compara los id de los vertices y si comparten los mismos adyacentes.
- * @param otro a comparar con este vertice.
- * @return true si el objeto especificado es igual a este vértice.
- */
-@Override
-public boolean equals(Object otro) {
-    if (this == otro) {
-        return true;
-    }
-    if (otro == null || !(otro instanceof Vertice)) {
-        return false;
-    }
-    Vertice otroVertice = (Vertice) otro;
-    return id.equals(otroVertice.id) && equalsList(otroVertice.getAdyacentes());
-}
+		if (!(other instanceof Vertice)) {
+			return false;
+		}
 
-/**
- * Compara si comparten los mismos adyacentes.
- * @param otrasAdyacentes a comparar con la lista de vertices.
- * @return true si las listas contienen los mismos adyacentes.
- */
-private boolean equalsList(List<Vertice> otrasAdyacentes) {
-    if (adyacentes == null && otrasAdyacentes == null) {
-        return true;
-    }
-    if (adyacentes == null || otrasAdyacentes == null) {
-        return false;
-    }
-    if (adyacentes.size() != otrasAdyacentes.size()) {
-        return false;
-    }
-    for (int i = 0; i < adyacentes.size(); i++) {
-        if (!otrasAdyacentes.contains(adyacentes.get(i))) {
-          return false;
-        }
-    }
-    return true;
-  }
+		Vertice aux = (Vertice) other;
 
+		if (!this.getId().equals(aux.getId())) {
+			return false;
+		}
 
-  /**
-   * La representacion de Vertices como {@code String}.
-   * El primer nodo es el id del Vertice principal.
-   * Luego conectado mediante "->" se encuentran los Vertices adyacentes.
-   * @return Representacion del vértice en forma de String.
-   */
-  @Override
-  public String toString() {
-    String strg = "[" + this.id + "] ->";
-    int i = 0;
-    while (i < adyacentes.size()) {
-      strg += "[" + adyacentes.get(i).getId() + "] -> ";
-      i++;
-    }
-    strg += " Nil";
-    return strg;
-  }
+		if (adyacentes.size() != aux.getAdyacentes().size()) {
+			return false;
+		}
 
+		for (int i = 0; i < adyacentes.size(); i++) {
+			if (!adyacentes.get(i).getId().equals(aux.getAdyacentes().get(i).getId())) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public static void main (String[] args) {
+		Vertice x = new Vertice(4);
+		x.agregarAdyacente(new Vertice(6));
+		x.agregarAdyacente(new Vertice(8));
+
+		System.out.println(x.toString());
+
+		//x.eliminarAdyacente(new Vertice(8));
+
+		//System.out.println(x.toString());
+
+		System.out.println(x.equals(x));
+
+		Vertice y = new Vertice(1);
+		y.agregarAdyacente(new Vertice(3));
+		y.agregarAdyacente(new Vertice(7));
+
+		System.out.println(y.toString());
+
+		System.out.println(x.equals(y));
+	}
 }
