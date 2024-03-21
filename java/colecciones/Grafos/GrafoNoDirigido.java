@@ -252,31 +252,136 @@ public class GrafoNoDirigido implements Grafo {
 		marked.remove(actual.getId());
 	}
 
-    //Solución del teórico: (coloreo todos los que no son adyacentes de un nodo y luego continuo) sin terminar
-	public static ArrayList<ArrayList<Vertice>> coloreoGrafo(GrafoNoDirigido graph) {
+	//revisar bien
+	public static ArrayList<ArrayList<Integer>> graphColoring(GrafoNoDirigido graph) {
 		//contiene los nodos coloreados:
-		ArrayList<Vertice> colored = new ArrayList<>();
+		ArrayList<Integer> colored = new ArrayList<>();
 		//contiene los conjuntos de colores. Cada conjunto tiene los nodos coloreados de su color.
-		ArrayList<ArrayList<Vertice>> colours = new ArrayList<>();
+		ArrayList<ArrayList<Integer>> colours = new ArrayList<>();
 
-		//creo un nuevo color:
-		ArrayList<Vertice> newColor = new ArrayList<>();
-        //para cada nodo de graph:
-		for (int i = 0; i < graph.getVertices().size(); i++) {
-			Vertice v = graph.getVertices().get(i);
-			//si v no está coloreado
-			if (!colored.contains(v)) {
-				//si v no es adyacente a ningun nodo en newColor:
-				for (int j = 0; j < newColor.size(); j++) {
-					if (v.getAdyacentes().contains(colored.get(j))) {
-						break;
-					}
-				}
-				colored.add(v);
-				newColor.add(v);
-				colours.add(newColor); //****
-			}
+		for (int k = 0; k < graph.getVertices().size(); k++) {
+			//dentro de este for lo que hago es pintar de un mismo color todos los nodos que no son adyacentes entre sí
+
+			//creo un nuevo color:
+		    ArrayList<Integer> newColor = new ArrayList<>();
+            //para cada nodo de graph:
+		    for (int i = 0; i < graph.getVertices().size(); i++) {
+			    Vertice v = graph.getVertices().get(i); //nodo
+			    Integer id = v.getId();                 //id del nodo
+			    //si v no está coloreado
+			    if (!colored.contains(id)) {
+			    	Boolean sameColor = false; //dice si algún adyacente a v ya esta pintado con newColor
+				    //si v no es adyacente a ningun nodo en newColor:
+				    if (newColor.size() > 0) {
+				    	for (int j = 0; j < v.getAdyacentes().size(); j++) {
+				    	    Integer adjId = v.getAdyacentes().get(j).getId();
+					        if (newColor.contains(adjId)) {
+						        sameColor = true;
+						        break;
+					        }
+				        }
+				    }
+
+				    if (!sameColor) {
+				    	colored.add(id);
+				        newColor.add(id);
+				    }
+			    }
+		    }
+		    colours.add(newColor);
 		}
 		return colours;
+	}
+
+
+	//revisar mas que bien
+	public static ArrayList<Integer> kColoring(GrafoNoDirigido graph){
+		
+		ArrayList<Integer> colored = new ArrayList<>();
+		//contiene los conjuntos de colores. Cada conjunto tiene los nodos coloreados de su color.
+		ArrayList<ArrayList<Integer>> colours = new ArrayList<>();
+
+		ArrayList<ArrayList<Integer>> obtenerelmin = new ArrayList<>();
+		for(@SuppressWarnings("unused") Vertice k: graph.getVertices()){
+			//creo un nuevo color
+			ArrayList<Integer> newColors = new ArrayList<>();
+			for(Vertice i: graph.getVertices()){
+				Integer id = i.getId();
+				if(!newColors.contains(id)){
+					if(newColors.size() > 0){
+						for(Vertice j: i.getAdyacentes()){
+							Integer idAdj = j.getId();
+							if(!newColors.contains(idAdj)){
+								newColors.add(idAdj);
+								colored.add(idAdj);
+							}
+
+						}
+					}
+				}
+			}
+			colours.add(newColors);
+			if(colored.size() == graph.cantVertices()){
+				obtenerelmin.add(newColors);
+			}
+		}
+		int min = 0;
+		for(int i=0; i<obtenerelmin.size(); i++){
+			min = 0;
+			for(int j=i+1; j<obtenerelmin.size(); j++){
+				if(obtenerelmin.get(min).size() > obtenerelmin.get(j).size()){
+					min = j; 
+				}
+			}
+		}
+		return obtenerelmin.get(min);
+	}
+
+	public static void main(String[] args) {
+		GrafoNoDirigido grafo = new GrafoNoDirigido();
+        /*
+		grafo.insertarVertice(new Vertice(1));
+		grafo.insertarVertice(new Vertice(2));
+		grafo.insertarVertice(new Vertice(3));
+		grafo.insertarVertice(new Vertice(4));
+
+		grafo.insertarArco(new Arista(new Vertice(1), new Vertice(2)));
+		grafo.insertarArco(new Arista(new Vertice(1), new Vertice(3)));
+		grafo.insertarArco(new Arista(new Vertice(4), new Vertice(3)));
+        */
+        //Ejemplo de la teoría:
+        grafo.insertarVertice(new Vertice(1));
+		grafo.insertarVertice(new Vertice(2));
+		grafo.insertarVertice(new Vertice(3));
+		grafo.insertarVertice(new Vertice(4));
+		grafo.insertarVertice(new Vertice(5));
+		grafo.insertarVertice(new Vertice(6));
+		grafo.insertarVertice(new Vertice(7));
+		grafo.insertarVertice(new Vertice(8));
+
+		grafo.insertarArco(new Arista(new Vertice(1), new Vertice(5)));
+		grafo.insertarArco(new Arista(new Vertice(1), new Vertice(2)));
+		grafo.insertarArco(new Arista(new Vertice(1), new Vertice(3)));
+		grafo.insertarArco(new Arista(new Vertice(1), new Vertice(4)));
+		grafo.insertarArco(new Arista(new Vertice(2), new Vertice(4)));
+		grafo.insertarArco(new Arista(new Vertice(3), new Vertice(2)));
+		grafo.insertarArco(new Arista(new Vertice(5), new Vertice(7)));
+		grafo.insertarArco(new Arista(new Vertice(5), new Vertice(6)));
+		grafo.insertarArco(new Arista(new Vertice(7), new Vertice(8)));
+		grafo.insertarArco(new Arista(new Vertice(6), new Vertice(7)));
+		grafo.insertarArco(new Arista(new Vertice(6), new Vertice(8)));
+		grafo.insertarArco(new Arista(new Vertice(2), new Vertice(8)));
+
+		System.out.println(grafo.toString());
+
+		ArrayList<ArrayList<Integer>> colores = graphColoring(grafo);
+
+		for (int i = 0; i < colores.size(); i++) {
+			ArrayList<Integer> color = colores.get(i);
+			System.out.println("color" + i + ": ");
+			for (int j = 0; j < color.size(); j++) {
+				System.out.println(color.get(j));
+			}
+		}
 	}
 }
