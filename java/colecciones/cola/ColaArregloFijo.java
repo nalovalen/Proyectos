@@ -2,6 +2,7 @@ package colecciones.cola;
 
 import java.util.Collection;
 
+
 /**
 * Implementación basada en arreglos de tamaño fijo de la interfaz {@code Cola}.
 * @see colecciones.cola.Cola
@@ -74,6 +75,7 @@ public class ColaArregloFijo<T> implements Cola<T> {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public T desencolar() {
 		if(esVacia())
 			throw new IllegalStateException("ColaVacia");
@@ -83,6 +85,7 @@ public class ColaArregloFijo<T> implements Cola<T> {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public T primero() {
 		if(esVacia())
 			throw new IllegalStateException("Cola Vacia");
@@ -116,6 +119,7 @@ public class ColaArregloFijo<T> implements Cola<T> {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public boolean equals(Object other) {
 		if (other==null) 
 			return false;
@@ -138,7 +142,7 @@ public class ColaArregloFijo<T> implements Cola<T> {
 	* Permite obtener un elemento del arreglo en un indice determinado realizando el casteo necesario.
 	* @param index el indice del elemento a obtener
 	*/
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "unused" })
    	private T elemento(int index) {
         	return (T) arreglo[index];
     	}

@@ -1,9 +1,11 @@
+package ejemploArchivos;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.io.IOException;
 
-//TODO: importar toda clase que crea necesaria
+//importar toda clase que crea necesaria
 
 /**
 * La clase {@code FinArchivo} implementa una aplicación simple para imprimir las últimas {@code n} líneas de un archivo.
@@ -76,11 +78,11 @@ public class FinArchivo {
 	}
 	
 	private static void mostrarUltimasNLineas(Path rutaAlArchivo, Integer n) {
-		//TODO: agregar cualquier estructura que crea necesaria
+		//agregar cualquier estructura que crea necesaria
 		try {
 			for (String linea : Files.readAllLines(rutaAlArchivo)) {
 				System.out.println(linea);
-				/*TODO: completar código necesario para resolver el problema
+				/*completar código necesario para resolver el problema
 				* posiblemente involucrando alguna estructura de datos.
 				*/
 			}
@@ -89,7 +91,7 @@ public class FinArchivo {
 			ioe.printStackTrace(System.err);
 			System.exit(2);
 		}
-		//TODO: imprimir las últimas n líneas
+		//imprimir las últimas n líneas
 	}
 	
 	private static void mostrarUso() {
