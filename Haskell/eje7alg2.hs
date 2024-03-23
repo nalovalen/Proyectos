@@ -18,33 +18,51 @@ remove a (x:xs)
 --Implementacion de los anagramas
 anagrama :: [Char] -> [Char] -> Bool
 anagrama [] [] = True
-anagrama [] _ = False
-anagrama _ [] = False
-anagrama xs ys = igual ms xs
+anagrama [] ys = False
+anagrama xs [] = False
+anagrama xs ys = igual ms ys
     where
-        ms = permutaciones ys
+        ms = permutaciones xs
 
 --Implementacion de si la suma de los elementos de un conjunto es igual a un numero
 sumList :: [Int]->Int->Bool
-sumList [] n = n==0
+sumList [] 0 = True
+sumList [] n = False
 sumList xs n = subSum (sublistas xs) n
+
+
 --Metodo auciliar de sumList
 subSum :: [[Int]]->Int->Bool
-subSum [[]] n = n==0
-subSum (x:xs) n = sum x == n|| subSum xs n
+subSum [] n = False
+subSum (x:xs) n = (sum x == n) || subSum xs n
 
 --Metodo auxiliar de anagrama
 igual :: (Eq a)=>[[a]]->[a]->Bool
-igual [[]] []= True
-igual [[]] ys = False
-igual xs [] = False
+igual [] []= True
+igual [] ys = False
 igual (x:xs) ys =  mismas x ys || igual xs ys
 
 --Metodo auxiliar de igual
 mismas :: (Eq a)=>[a]->[a]->Bool
 mismas [] []= True
-mismas _ []= False
-mismas [] _ = False
+mismas xs []= False
+mismas [] ys = False
 mismas (x:xs) (y:ys) = x==y && mismas xs ys
 
+--Implementacion de si una cadena es subcadena de otra
+subcadena :: [Char]->[Char]->Bool
+subcadena [] [] = True
+subcadena [] ys = True
+subcadena xs [] = False
+subcadena xs ys = igual ms xs
+    where
+        ms = sublistas ys
 
+
+subsec :: [Char]->[Char]->Bool
+subsec [] [] = True
+subsec xs [] = False
+subsec [] ys = True
+subsec (x:xs) (y:ys)
+    |x==y = subsec xs ys
+    |x/=y = subsec (x:xs) ys
