@@ -1,5 +1,6 @@
 package colecciones.cola;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 
@@ -146,5 +147,15 @@ public class ColaArregloFijo<T> implements Cola<T> {
    	private T elemento(int index) {
         	return (T) arreglo[index];
     	}
+
+	public static <T extends Comparable<T>> ArrayList<T> repetidos(ArrayList<T> array){
+		ArrayList<T> result = new ArrayList<>();
+		for(int i = 0; i < array.size(); i++){
+			if(!result.contains(array.get(i))){
+				result.add(array.get(i));
+			}
+		}
+		return result;
+	} 
 
 }
