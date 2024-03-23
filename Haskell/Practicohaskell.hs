@@ -2,7 +2,7 @@
 -- El texto tiene varias funciones y tipos de datos ya implementados, el trabajo consiste en completar aquellas funciones 
 -- que no se encuentran implementadas (es decir, estan definidas con 'undefined').  
 
-module Piedras where 
+module Piedras where
 
 -- | El siguiente tipo define los jugadores del juego, C por Computadora
 --   y H por Humano
@@ -10,10 +10,10 @@ data Jugador = C | H deriving (Eq,Show)
 
 
 -- | Definimos los estados, un estado es un jugador mas las cantidad de piedras disponibles
-type Estado = (Jugador, Int) 
+type Estado = (Jugador, Int)
 
 -- | Definimos los posibles estados del juegos, el resultado del juego, puede ser que la computadora pierda, o gane
-data Resultado = CPerdio | CGano deriving (Eq,Ord,Show) 
+data Resultado = CPerdio | CGano deriving (Eq,Ord,Show)
 
 -- | Definimos las posible jugadas, sacar 1 piedra, 3 piedras o 4 piedras
 jugadas = [1,3,4]
@@ -33,11 +33,11 @@ hacerJugada n (j,k)
 --  las mejores jugadas del oponente. Por ejemplo, evalEstado (H,2) = CGano, porque H solo puede
 --  retirar 1 y luego la computadora retira 1 y gana
 evalEstado :: Estado -> Resultado
-evalEstado  (j, k)  | (k == 0) = if j == C then CPerdio else CGano
+evalEstado  (j, k)  | k == 0 = if j == C then CPerdio else CGano
                   |  k>0 && j == C   = foldl max CPerdio $ map evalEstado posibleJugs
-                  |  k>0 && j == H   = foldl min CGano $ map evalEstado posibleJugs   
+                  |  k>0 && j == H   = foldl min CGano $ map evalEstado posibleJugs
                   |  otherwise = error "jugada no valida"
-                  where posibleJugs = [(otroJugador j, k - i) | i<- jugadas, i<=k]    
+                  where posibleJugs = [(otroJugador j, k - i) | i<- jugadas, i<=k]
 
 -- | Calcula la mejor jugada para un estado dado, para el jugador dado.
 -- Por ejemplo, mejorJug (H,3) debería devolver 3, ya que la mejor jugada para H cuando hay 3 piedras es retirar 3.
@@ -50,26 +50,26 @@ evalEstado  (j, k)  | (k == 0) = if j == C then CPerdio else CGano
 -- 	En el caso mejorJug (H, k) tenemos que devolver la jugada que nos da el valor minimo (es decir, consideramos 
 -- 	la mejor jugada para H, que seria la peor para C).
 mejorJug :: Estado -> Int
-mejorJug (j,k) 
-            |j==C = foldl max 1 [x|x<-jugadas, k-x>=0 && evalEstado(H , k-x) == CGano]
-            |j==H = foldl max 1 [x|x<-jugadas, k-x>=0 && evalEstado(C , k-x) == CPerdio]
+mejorJug (j,k)
+            |j==C = foldl max 1 [x|x<-jugadas, k-x>=0 && evalEstado (H , k-x) == CGano]
+            |j==H = foldl max 1 [x|x<-jugadas, k-x>=0 && evalEstado (C , k-x) == CPerdio]
 
 -- | Las siguientes funciones implementan una pequeña interface para poder jugar interactivamente,.
 jugar :: Estado -> IO()
 jugar (j,k) = do
-	        putStrLn ("Hay "++ (show k) ++ " piedras, cuantas saca?:")	  
-	        jugada <-  getLine
-	        let s  = read jugada 
-	            (j', k') = hacerJugada s (j,k) 
-	        if k'==0 then (putStrLn "Gano!")
-	        else do 
-	     	     let mj = mejorJug (j',k')    
-	     	     putStrLn ("mi jugada: "++(show mj))
-	             if k' - mj ==0 
-	             then putStrLn "Perdio!"
-	             else do 
-	             	  jugar (H, k' - mj) 
-	      
+                putStrLn ("Hay "++ show k ++ " piedras, cuantas saca?:")
+                jugada <-  getLine
+                let s  = read jugada
+                    (j', k') = hacerJugada s (j,k)
+                if k'==0 then putStrLn "Gano!"
+                else do
+                     let mj = mejorJug (j',k')
+                     putStrLn ("mi jugada: "++show mj)
+                     if k' - mj ==0
+                     then putStrLn "Perdio!"
+                     else do
+                          jugar (H, k' - mj)
+
 -- | Comienza el juego con una cantidad de piedras dada el Humano  
 comenzarJuego :: Int -> IO()
 comenzarJuego cant | cant <= 0 = error "La cantidad de piedras debe ser mayor que 0."
@@ -82,6 +82,6 @@ juegosGanadores2 :: Int -> [Int]
 juegosGanadores2 i = [x|x<-[2..i],mod x 7 == 0 || mod x 7 ==2]
 
 juegosGanadores1 :: Int -> [Int]
-juegosGanadores1 i = [k|k<-[2..i],evalEstado(H,k)==CGano]
+juegosGanadores1 i = [k|k<-[2..i],evalEstado (H,k)==CGano]
 
 
