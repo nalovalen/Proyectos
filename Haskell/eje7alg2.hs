@@ -1,4 +1,6 @@
 --Implementacion de permutaciones de una lista
+{-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
+{-# HLINT ignore "Use foldr" #-}
 permutaciones :: (Eq a)=> [a] -> [[a]]
 permutaciones [] = [[]]
 permutaciones xs = [x:p| x<-xs, p<- permutaciones(remove x xs)]
