@@ -1,4 +1,4 @@
-package java.compras;
+package compras;
 
 public class Lcs {
 
@@ -27,8 +27,8 @@ public class Lcs {
     }
 
     public static void main(String[] args) {
-        String str1 = "ABCBDAB";
-        String str2 = "BDCAB";
+        String str1 = "BCDAACD";
+        String str2 = "BCDAACD";
 
         String lcs = findLCS(str1, str2);
         System.out.println("La subsecuencia común más larga es: " + lcs);
