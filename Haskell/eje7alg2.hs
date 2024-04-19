@@ -5,6 +5,10 @@ permutaciones :: (Eq a)=> [a] -> [[a]]
 permutaciones [] = [[]]
 permutaciones xs = [x:p| x<-xs, p<- permutaciones(remove x xs)]
 
+--Implementacion de los subconjuntos de un conjunto
+subconj :: [a]->[[a]]
+subconj [] = [[]]
+subconj (x:xs) = subconj xs ++ map (x:) (subconj xs) 
 
 --Implementacion de todas las sublistas de una lista
 sublistas :: [a] -> [[a]]
@@ -68,3 +72,9 @@ subsec [] ys = True
 subsec (x:xs) (y:ys)
     |x==y = subsec xs ys
     |x/=y = subsec (x:xs) ys
+
+
+dieta :: [Int]->Bool
+dieta (x:xs) = or[sum y == 0 && length y /= 0|y<- ps ]
+    where
+        ps = subconj (x:xs)
