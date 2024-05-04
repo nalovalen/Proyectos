@@ -12,11 +12,11 @@ public interface Grafo {
 
 	public boolean insertarVertice(Vertice a);
 
-	public boolean insertarArco(Arista a);
+	public boolean insertarArco(AristaCosto a);
 
 	public boolean borrarVertice(Vertice a);
 
-	public boolean borrarArco(Arista a);
+	public boolean borrarArco(AristaCosto a);
 
 	public boolean pertenece(Vertice a);
 

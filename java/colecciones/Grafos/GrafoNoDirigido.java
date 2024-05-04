@@ -3,12 +3,18 @@ package colecciones.Grafos;
 import java.util.ArrayList;
 
 public class GrafoNoDirigido implements Grafo {
-	private ArrayList<Vertice> vertices;
-	private ArrayList<Arista> aristas;
+	/**
+	 * list of graph vertices
+	 */
+	private static ArrayList<Vertice> vertices;
+	/**
+	 * list of graph edges
+	 */
+	private static ArrayList<AristaCosto> aristas;
 
 	public GrafoNoDirigido() {
-		vertices = new ArrayList<>();
-		aristas = new ArrayList<>();
+		vertices = new ArrayList<Vertice>();
+		aristas = new ArrayList<AristaCosto>();
 	}
 
 	private ArrayList<Vertice> getVertices() {
@@ -28,9 +34,13 @@ public class GrafoNoDirigido implements Grafo {
 	}
 
 	public boolean hayArco(Vertice a, Vertice b) {
-		return aristas.contains(new Arista(a,b));
+		return aristas.contains(new AristaCosto(a, b));
 	}
 
+	/**
+	 * @param a is the vertex to insert
+	 * @return true if the vertex was inserted with I exist and false otherwise
+	 */
 	public boolean insertarVertice(Vertice a) {
 		if (vertices.contains(a)) {
 			return true;
@@ -39,11 +49,14 @@ public class GrafoNoDirigido implements Grafo {
 		return vertices.add(a);
 	}
 
-	public boolean insertarArco(Arista a) {
+	/**
+	 * @param a is the edge to insert
+	 * @return true if the edge was inserted successfully false otherwise
+	 */
+	public boolean insertarArco(AristaCosto a) {
 		if (aristas.contains(a)) {
 			return true;
 		}
-        
 		int first = -1;
 		int second = -1;
 
@@ -59,13 +72,18 @@ public class GrafoNoDirigido implements Grafo {
 
 		Vertice v1 = vertices.get(first);
 		Vertice v2 = vertices.get(second);
-        
 		vertices.get(first).agregarAdyacente(v2);
 		vertices.get(second).agregarAdyacente(v1);
-        
-		return aristas.add(a) && aristas.add(new Arista(a.getSecond(), a.getFirst())); //como es no dirgido es simétrico
+		boolean res = aristas.add(a);
+		boolean res1 = aristas.add(new AristaCosto(a.getSecond(), a.getFirst(), a.getCosto()));
+		return  res && res1;  //como es no dirgido es simétrico
 	}
 
+	/**
+	 * @param a is the vertex to delete from the graph
+	 * @return true if the vertex was deleted successfully and false otherwise
+	 * @throws IllegalArgumentException if the vertex to be deleted does not exist
+	 */
 	public boolean borrarVertice(Vertice a) throws IllegalArgumentException {
 		if (vertices.size() == 0) {
 			throw new IllegalArgumentException("no hay vertices!");
@@ -87,12 +105,12 @@ public class GrafoNoDirigido implements Grafo {
 				vertices.get(i).getAdyacentes().remove(v);
 			}
 		}
-        
+
         //lo borro de las aristas
 		for (int i = 0; i < aristas.size(); i++) {
 			if ((aristas.get(i).getFirst().getId() == v.getId()) || (aristas.get(i).getSecond().getId() == v.getId())) {
-				Arista w = aristas.get(i);
-				aristas.remove(new Arista(w.getSecond(), w.getFirst()));
+				AristaCosto w = aristas.get(i);
+				aristas.remove(new AristaCosto(w.getSecond(), w.getFirst(), w.getCosto()));
 				aristas.remove(w);
 			}
 		}
@@ -101,10 +119,14 @@ public class GrafoNoDirigido implements Grafo {
 		return true;
 	}
 
-	public boolean borrarArco(Arista a) {
+	/**
+	 * @param a is the edge to delete from the graph
+	 * @return true if the edge was successfully deleted and false otherwise
+	 */
+	public boolean borrarArco(AristaCosto a) {
 		Vertice v1 = null;
 		Vertice v2 = null;
-        
+
         //obtengo los vértices de la arista:
 		for (int i = 0; i < vertices.size(); i++) {
 			if (vertices.get(i).getId() == a.getFirst().getId()) {
@@ -121,16 +143,16 @@ public class GrafoNoDirigido implements Grafo {
 		v2.getAdyacentes().remove(v1);
 
 		//borro la arista:
-		Arista a1 = null;
-		Arista a2 = null;
+		AristaCosto a1 = null;
+		AristaCosto a2 = null;
 
 		for (int i = 0; i < aristas.size(); i++) {
 			if (aristas.get(i).getFirst().getId() == v1.getId() && aristas.get(i).getSecond().getId() == v2.getId()) {
-				a1 = aristas.get(i);
+				a1 = (AristaCosto) aristas.get(i);
 			}
 
 			if (aristas.get(i).getFirst().getId() == v2.getId() && aristas.get(i).getSecond().getId() == v1.getId()) {
-				a2 = aristas.get(i);
+				a2 = (AristaCosto) aristas.get(i);
 			}
 		}
 
@@ -139,6 +161,30 @@ public class GrafoNoDirigido implements Grafo {
 		return true;
 	}
 
+	/**
+	 * @param a is the exit vertex
+	 * @param b is the vertex of arrival
+	 * @return is the weight of going from vertex a to vertex b in the graph
+	 */
+	public Number getCostoArista(Vertice a, Vertice b) {
+		for (int i = 0; i < aristas.size(); i++) {
+			AristaCosto w = (AristaCosto) aristas.get(i);
+
+			if (w.getFirst().getId() == a.getId() && w.getSecond().getId() == b.getId()) {
+				return w.getCosto();
+			}
+
+			if (w.getSecond().getId() == b.getId() && w.getFirst().getId() == a.getId()) {
+				return w.getCosto();
+			}
+		}
+		return 0;
+	}
+
+	/**
+	 * @param a is the vertex to search in the graph
+	 * @return true if the vertex is in the graph and false otherwise
+	 */
 	public boolean pertenece(Vertice a) { //hay que arreglarlo un poco (puede fallar por la lista de adyacencias)
 		return vertices.contains(a);
 	}
@@ -266,7 +312,7 @@ public class GrafoNoDirigido implements Grafo {
 		    ArrayList<Integer> newColor = new ArrayList<>();
             //para cada nodo de graph:
 		    for (int i = 0; i < graph.getVertices().size(); i++) {
-			    Vertice v = graph.getVertices().get(i); //nodo
+			    Vertice v = (Vertice) graph.getVertices().get(i); //nodo
 			    Integer id = v.getId();                 //id del nodo
 			    //si v no está coloreado
 			    if (!colored.contains(id)) {
@@ -293,50 +339,6 @@ public class GrafoNoDirigido implements Grafo {
 		return colours;
 	}
 
-
-	//revisar mas que bien
-	public static ArrayList<Integer> kColoring(GrafoNoDirigido graph){
-		
-		ArrayList<Integer> colored = new ArrayList<>();
-		//contiene los conjuntos de colores. Cada conjunto tiene los nodos coloreados de su color.
-		ArrayList<ArrayList<Integer>> colours = new ArrayList<>();
-
-		ArrayList<ArrayList<Integer>> obtenerelmin = new ArrayList<>();
-		for(@SuppressWarnings("unused") Vertice k: graph.getVertices()){
-			//creo un nuevo color
-			ArrayList<Integer> newColors = new ArrayList<>();
-			for(Vertice i: graph.getVertices()){
-				Integer id = i.getId();
-				if(!newColors.contains(id)){
-					if(newColors.size() > 0){
-						for(Vertice j: i.getAdyacentes()){
-							Integer idAdj = j.getId();
-							if(!newColors.contains(idAdj)){
-								newColors.add(idAdj);
-								colored.add(idAdj);
-							}
-
-						}
-					}
-				}
-			}
-			colours.add(newColors);
-			if(colored.size() == graph.cantVertices()){
-				obtenerelmin.add(newColors);
-			}
-		}
-		int min = 0;
-		for(int i=0; i<obtenerelmin.size(); i++){
-			min = 0;
-			for(int j=i+1; j<obtenerelmin.size(); j++){
-				if(obtenerelmin.get(min).size() > obtenerelmin.get(j).size()){
-					min = j; 
-				}
-			}
-		}
-		return obtenerelmin.get(min);
-	}
-
 	public static void main(String[] args) {
 		GrafoNoDirigido grafo = new GrafoNoDirigido();
         /*
@@ -359,18 +361,18 @@ public class GrafoNoDirigido implements Grafo {
 		grafo.insertarVertice(new Vertice(7));
 		grafo.insertarVertice(new Vertice(8));
 
-		grafo.insertarArco(new Arista(new Vertice(1), new Vertice(5)));
-		grafo.insertarArco(new Arista(new Vertice(1), new Vertice(2)));
-		grafo.insertarArco(new Arista(new Vertice(1), new Vertice(3)));
-		grafo.insertarArco(new Arista(new Vertice(1), new Vertice(4)));
-		grafo.insertarArco(new Arista(new Vertice(2), new Vertice(4)));
-		grafo.insertarArco(new Arista(new Vertice(3), new Vertice(2)));
-		grafo.insertarArco(new Arista(new Vertice(5), new Vertice(7)));
-		grafo.insertarArco(new Arista(new Vertice(5), new Vertice(6)));
-		grafo.insertarArco(new Arista(new Vertice(7), new Vertice(8)));
-		grafo.insertarArco(new Arista(new Vertice(6), new Vertice(7)));
-		grafo.insertarArco(new Arista(new Vertice(6), new Vertice(8)));
-		grafo.insertarArco(new Arista(new Vertice(2), new Vertice(8)));
+		grafo.insertarArco(new AristaCosto(new Vertice(1), new Vertice(5),1));
+		grafo.insertarArco(new AristaCosto(new Vertice(1), new Vertice(2), 1));
+		grafo.insertarArco(new AristaCosto(new Vertice(1), new Vertice(3), 1));
+		grafo.insertarArco(new AristaCosto(new Vertice(1), new Vertice(4), 1));
+		grafo.insertarArco(new AristaCosto(new Vertice(2), new Vertice(4), 1));
+		grafo.insertarArco(new AristaCosto(new Vertice(3), new Vertice(2), 1));
+		grafo.insertarArco(new AristaCosto(new Vertice(5), new Vertice(7), 1));
+		grafo.insertarArco(new AristaCosto(new Vertice(5), new Vertice(6), 1));
+		grafo.insertarArco(new AristaCosto(new Vertice(7), new Vertice(8), 1));
+		grafo.insertarArco(new AristaCosto(new Vertice(6), new Vertice(7), 1));
+		grafo.insertarArco(new AristaCosto(new Vertice(6), new Vertice(8), 1));
+		grafo.insertarArco(new AristaCosto(new Vertice(2), new Vertice(8), 1));
 
 		System.out.println(grafo.toString());
 

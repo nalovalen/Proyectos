@@ -7,7 +7,7 @@ import java.util.Collections;
 
 public class GrafoDirigido implements Grafo {
 	private ArrayList<Vertice> vertices;
-	private ArrayList<Arista> aristas;
+	private ArrayList<AristaCosto> aristas;
 
 	public GrafoDirigido() {
 		vertices = new ArrayList<>();
@@ -31,7 +31,7 @@ public class GrafoDirigido implements Grafo {
 	}
 
 	public boolean hayArco(Vertice a, Vertice b) {
-		return aristas.contains(new Arista(a,b));
+		return aristas.contains(new AristaCosto(a,b));
 	}
 
 	public boolean insertarVertice(Vertice a) {
@@ -42,7 +42,7 @@ public class GrafoDirigido implements Grafo {
 		return vertices.add(a);
 	}
 
-	public boolean insertarArco(Arista a) {
+	public boolean insertarArco(AristaCosto a) {
 		if (aristas.contains(a)) {
 			return true;
 		}
@@ -94,14 +94,14 @@ public class GrafoDirigido implements Grafo {
         //lo borro de las aristas
 		for (int i = 0; i < aristas.size(); i++) {
 			if ((aristas.get(i).getFirst().getId() == v.getId())) {
-				Arista w = aristas.get(i);
+				AristaCosto w = aristas.get(i);
 				aristas.remove(w);
 			}
 		}
 
 		for (int i = 0; i < aristas.size(); i++) {
 			if (aristas.get(i).getSecond().getId() == v.getId()) {
-				Arista w = aristas.get(i);
+				AristaCosto w = aristas.get(i);
 				aristas.remove(w);
 			}
 		} //PD: lo cambie pq hay una situación en la que no podía borrar todas las aristas: (2,3),(3,1) -> no borraba (3,1)
@@ -110,7 +110,7 @@ public class GrafoDirigido implements Grafo {
 		return true;
 	}
 
-	public boolean borrarArco(Arista a) {
+	public boolean borrarArco(AristaCosto a) {
 		Vertice v1 = null;
 		Vertice v2 = null;
         
@@ -130,7 +130,7 @@ public class GrafoDirigido implements Grafo {
 		v2.getAdyacentes().remove(v1);
 
 		//borro la arista:
-		Arista a1 = null;
+		AristaCosto a1 = null;
 
 		for (int i = 0; i < aristas.size(); i++) {
 			if (aristas.get(i).getFirst().getId() == v1.getId() && aristas.get(i).getSecond().getId() == v2.getId()) {

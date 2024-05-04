@@ -1,32 +1,66 @@
 package colecciones.Grafos;
+
 import java.util.ArrayList;
+
 
 public class Vertice {
 
+	/**
+	 * vertex identifier
+	 */
 	private final Integer id;
+
+	/**
+	 * list of adjacent vertices
+	 */
 	private ArrayList<Vertice> adyacentes;
 
-	public Vertice (Integer id) {
+	/**
+	 *
+	 * @param id identifier for the new vertex.
+	 */
+	public Vertice(Integer id) {
 		this.id = id;
 		adyacentes = new ArrayList<>();
 	}
 
+	/**
+	 *
+	 * @return vertex identifier.
+	 */
 	public Integer getId() {
 		return id;
 	}
 
+	/**
+	 *
+	 * @return list of vertices adjacent to this.
+	 */
 	public ArrayList<Vertice> getAdyacentes() {
 		return adyacentes;
 	}
 
+	/**
+	 *
+	 * @param a new vertex adjacent to this.
+	 * @return list of vertices adjacent to this.
+	 */
 	public boolean agregarAdyacente(Vertice a) {
 		return adyacentes.add(a);
 	}
 
+	/**
+	 *
+	 * @param a adjacent vertex to delete.
+	 * @return 	list of vertices adjacent to this.
+	 */
 	public boolean eliminarAdyacente(Vertice a) {
 		return adyacentes.remove(a);
 	}
 
+	/**
+	 * show vertices by console
+	 */
 	@Override
 	public String toString() {
 		String res = "[" + id.toString() + "] -> ";
@@ -36,6 +70,10 @@ public class Vertice {
 		return res + "null";
 	}
 
+	/**
+	 * @param other object which I am going to see if it is equal to this.
+	 * @return if the other element contains the same or is this.
+	 */
 	@Override
 	public boolean equals(Object other) {
 		if (other == null) {
@@ -68,25 +106,11 @@ public class Vertice {
 		return true;
 	}
 
-	public static void main (String[] args) {
-		Vertice x = new Vertice(4);
-		x.agregarAdyacente(new Vertice(6));
-		x.agregarAdyacente(new Vertice(8));
-
-		System.out.println(x.toString());
-
-		//x.eliminarAdyacente(new Vertice(8));
-
-		//System.out.println(x.toString());
-
-		System.out.println(x.equals(x));
-
-		Vertice y = new Vertice(1);
-		y.agregarAdyacente(new Vertice(3));
-		y.agregarAdyacente(new Vertice(7));
-
-		System.out.println(y.toString());
-
-		System.out.println(x.equals(y));
+	/**
+	 * @return new identifier for vertex this.
+	 */
+	@Override
+	public int hashCode() {
+		return id * 5;
 	}
 }
