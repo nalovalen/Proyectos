@@ -78,3 +78,28 @@ dieta :: [Int]->Bool
 dieta (x:xs) = or[sum y == 0 && length y /= 0|y<- ps ]
     where
         ps = subconj (x:xs)
+
+data Nat = Zero | Succ Nat
+
+instance Eq Nat where
+    (==) :: Nat -> Nat -> Bool
+    Zero == Zero = True
+    Succ m == Zero = False
+    Zero == Succ n = False
+    Succ m == Succ n = n==m
+
+instance Show Nat where
+    show Zero = "Zero"
+    show (Succ n) = "Succ (" ++ show n ++ ")"
+
+
+data Tree a = Nil | Node a (Tree a) (Tree a)
+
+instance Eq a => Eq (Tree a) where
+    Nil == Nil = True
+    (Node a hi hd) == (Node b hi1 hd1) = a == b && hi1 == hi && hd == hd1
+    _ == _ = False
+
+instance Show a => Show (Tree a) where
+    show Nil = "Nill"
+    show (Node a hi hd) = "(" ++ show hi ++ "," ++ show a ++ "," ++ show hd ++ ")"
